@@ -129,6 +129,16 @@ class Authentication {
         return $this->loggedin;
     }
     
+
+    /**
+     * showHiddenTags
+     *
+     * @return bool
+     */
+    public function showHiddenTags() {
+       return $this->isLoggedin();
+     }
+
     
     /**
      * logout

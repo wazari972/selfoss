@@ -30,7 +30,21 @@ class Tags extends Database {
         $this->backend = new $class();
         parent::__construct();
     }
-    
+
+    public function get() {
+      $tags = $this->backend->get();
+        
+      if(!\F3::get('auth')->showHiddenTags()) {
+        foreach($tags as $idx => $tag) {
+          if (strpos($tag['tag'], "@") !== false) {
+            unset($tags[$idx]);
+          }
+        }
+        $tags = array_values($tags);
+      }
+
+      return $tags;
+    }
     
     /**
      * pass any method call to the backend.

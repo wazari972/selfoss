@@ -80,6 +80,17 @@ class Items extends Database {
             $options
         );
         
-        return $this->backend->get($options);
+        $items = $this->backend->get($options);
+
+        if(!\F3::get('auth')->showHiddenTags()) {
+          foreach($items as $idx => $item) {
+            if (strpos($item['tags'], "@") !== false) {
+              unset($items[$idx]);
+            }
+          }
+          $items = array_values($items);
+        }
+        
+        return $items;
     }
 }
