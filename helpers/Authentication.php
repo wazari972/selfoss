@@ -63,6 +63,11 @@ class Authentication {
             && isset($_REQUEST['password'])) {
             $this->login($_REQUEST['username'], $_REQUEST['password']);
         }
+
+        // autologin for trusted ips
+        if (\F3::get('trusted_ip') && in_array($_SERVER["REMOTE_ADDR"], \F3::get('trusted_ip'))){
+          $this->loggedin = true;
+        }
     }
     
     
