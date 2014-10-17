@@ -159,7 +159,7 @@ class ics extends \spouts\spout {
       
       $this->items = $ical->events();
       
-      $this->days = -1;//$params['days'];
+      $this->days = $params['days'];
       $this->rewind();
 
       $this->params = $params;
@@ -281,6 +281,8 @@ class ics extends \spouts\spout {
       }
        
       $id = $this->current_event()["UID"];
+      $id .= date("Y-m-d"); // refresh the event every day
+
       if (strlen($id) > 255) {
         $id = md5($id);
       }
@@ -302,7 +304,7 @@ class ics extends \spouts\spout {
       
       $dispdate = start_time($event["DTSTART"]) . " -> " . end_time($event["DTEND"]);
       $text = stripslashes(htmlentities($event["SUMMARY"]));
-      echo "$dispdate | $text <br/>";
+
       return "$dispdate | $text";
     }
 
