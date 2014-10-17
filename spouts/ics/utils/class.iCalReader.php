@@ -143,6 +143,15 @@ class ICal
                 break;
             }
         }
+
+        if (stristr($keyword, "RRULE")) { // repeating event 
+          $rules = explode(";", $value);
+          foreach ($rules as $rule) {
+            $rrule = explode("=", $rule);
+            $repeat_rule[$rrule[0]] = $rrule[1];
+          }
+          $value = $repeat_rule;
+        }
         
         if (stristr($keyword, "DTSTART") or stristr($keyword, "DTEND")) {
             $keyword = explode(";", $keyword);

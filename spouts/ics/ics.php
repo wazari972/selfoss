@@ -10,6 +10,20 @@ ini_set('display_errors', 'On');
 require 'utils/class.iCalReader.php';
 require 'utils/owncloud-calendar-export.php';
 
+function repeating_time($rr) {
+  if ($rr["FREQ"] === "WEEKLY") {
+    $DAYS_OF_WEEK = array("SU" => "Dimanche",
+                          "MO" => "Lundi", "TU" => "Mardi",
+                          "WE" => "Mercredi", "TH" => "Jeudi",
+                          "FR" => "Vendredi", "SA" => "Samedi");
+    
+    if ($rr["INTERVAL"] === "1") {
+      return $DAYS_OF_WEEK[$rr["BYDAY"]]. " prochain";
+    }
+  }
+  return $rr["FREQ"] . "*" . $rr["INTERVAL"];
+}
+
 function start_time($dt) {
   $date = date_parse($dt);
   $sdate = $date["year"] ."-". $date["month"] ."-". $date["day"];
@@ -231,21 +245,16 @@ class ics extends \spouts\spout {
         $event_date = strtotime($event["DTSTART"]);
         $daydiff = floor(($event_date - time()) / 60 / 60 / 24); // in days
           
-        if (isset($event["RRULE"])) { // repeating event 
-          $rules = explode(";", $event["RRULE"]);
-          foreach ($rules as $rule) {
-            $rrule = explode("=", $rule);
-            $repeat_rule[$rrule[0]] = $rrule[1];
-          }
-          
-          if ($repeat_rule["FREQ"] === "WEEKLY") {
-            if ($repeat_rule["INTERVAL"] !== "1") {
+        if (isset($event["RRULE"])) { // repeating event
+          if ($event["RRULE"]["FREQ"] === "WEEKLY") {
+            if ($event["RRULE"]["INTERVAL"] !== "1") {
               //ignore for now
               continue;
             }
             $DAYS_OF_WEEK = array("SU" => 0, "MO" => 1, "TU" => 2, "WE" => 3, "TH" => 4, "FR" => 5, "SA" => 6);
-            $daydist = $DAYS_OF_WEEK[$repeat_rule["BYDAY"]] - date("w");
-            if ($daydist < 0) $daydist += 7;
+            $daydiff = $DAYS_OF_WEEK[$event["RRULE"]["BYDAY"]] - date("w");
+            if ($daydiff < 0) $daydiff += 7;
+            
           } else {
             // ignore for now
             continue;
@@ -258,7 +267,8 @@ class ics extends \spouts\spout {
         if ($this->days !== -1 && $daydiff > $this->days) { // not more than $days of distance
           continue;
         }
-        
+        $this->items[$this->position]["DDIST"] = $daydiff;
+
         return $this->current();
       }
     }
@@ -302,7 +312,8 @@ class ics extends \spouts\spout {
        
       $id = $this->current_event()["UID"];
       $id .= date("Y-m-d"); // refresh the event every day
-
+      print $this->getTitle()."<br/>";
+      print $this->getContent()."<br/><br/>";
       if (strlen($id) > 255) {
         $id = md5($id);
       }
@@ -321,8 +332,13 @@ class ics extends \spouts\spout {
       }
       
       $event = $this->current_event();
+      if (isset($event["RRULE"])) {
+        $dispdate = repeating_time($event["RRULE"]) . " " . end_time($event["DTSTART"]);
+      } else {
+        $dispdate = start_time($event["DTSTART"]);
+      }
+      $dispdate .= " -> " . end_time($event["DTEND"]);
       
-      $dispdate = start_time($event["DTSTART"]) . " -> " . end_time($event["DTEND"]);
       $text = stripslashes(htmlentities($event["SUMMARY"]));
 
       return "$dispdate | $text";
@@ -365,6 +381,8 @@ class ics extends \spouts\spout {
             $description .= "s";
           }
         }
+
+        $description .= "\nDans ".$event["DDIST"]. " jours";
         
         $description = str_replace("<br>", "\n", htmlentities($description));
         
