@@ -229,16 +229,37 @@ class ics extends \spouts\spout {
         }
         
         $event_date = strtotime($event["DTSTART"]);
-
-        if ($event_date < time()) { // not in the past
+        $daydiff = floor(($event_date - time()) / 60 / 60 / 24); // in days
+          
+        if (isset($event["RRULE"])) { // repeating event 
+          echo "repeating : ".$event["RRULE"]."<br/>";
+          $rules = explode(";", $event["RRULE"]);
+          foreach ($rules as $rule) {
+            $rrule = explode("=", $rule);
+            $repeat_rule[$rrule[0]] = $rrule[1];
+          }
+          
+          if ($repeat_rule["FREQ"] === "WEEKLY") {
+            if ($repeat_rule["INTERVAL"] !== "1") {
+              //ignore for now
+              continue;
+            }
+            $DAYS_OF_WEEK = array("SU" => 0, "MO" => 1, "TU" => 2, "WE" => 3, "TH" => 4, "FR" => 5, "SA" => 6);
+            $daydist = $DAYS_OF_WEEK[$repeat_rule["BYDAY"]] - date("w");
+            if ($daydist < 0) $daydist += 7;
+          } else {
+            // ignore for now
+            continue;
+          }
+        } else { // normal event
+          if ($event_date < time()) { // not in the past
+            continue;
+          }
+        }
+        if ($this->days !== -1 && $daydiff > $this->days) { // not more than $days of distance
           continue;
         }
-
-        $datediff = $event_date - time();
-        $datediff = floor($datediff / 60 / 60 / 24);
-        if ($this->days !== -1 && $datediff > $this->days) { // not more than $days of distance
-          continue;
-        }
+        
         return $this->current();
       }
     }
