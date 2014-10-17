@@ -232,7 +232,6 @@ class ics extends \spouts\spout {
         $daydiff = floor(($event_date - time()) / 60 / 60 / 24); // in days
           
         if (isset($event["RRULE"])) { // repeating event 
-          echo "repeating : ".$event["RRULE"]."<br/>";
           $rules = explode(";", $event["RRULE"]);
           foreach ($rules as $rule) {
             $rrule = explode("=", $rule);
