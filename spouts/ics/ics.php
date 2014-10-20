@@ -312,8 +312,6 @@ class ics extends \spouts\spout {
        
       $id = $this->current_event()["UID"];
       $id .= date("Y-m-d"); // refresh the event every day
-      print $this->getTitle()."<br/>";
-      print $this->getContent()."<br/><br/>";
       if (strlen($id) > 255) {
         $id = md5($id);
       }
@@ -375,15 +373,17 @@ class ics extends \spouts\spout {
         if (isset($event["LOCATION"])) {
           $description .= "\nLocation: ".htmlentities($event["LOCATION"]);
         }
-        if ($disttime != 0) {
-          $description .= "\nin $disttime day";
-          if ($disttime != 1) {
+
+        if ($event["DDIST"] === 0) {
+	  $description .= "\nAujourd'hui";
+	} else {
+          $description .= "\nDans ".$event["DDIST"]. " jour";
+          
+          if ($disttime !== 1) {
             $description .= "s";
           }
         }
 
-        $description .= "\nDans ".$event["DDIST"]. " jours";
-        
         $description = str_replace("<br>", "\n", htmlentities($description));
         
         return $description;
