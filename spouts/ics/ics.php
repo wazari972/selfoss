@@ -25,22 +25,22 @@ function repeating_time($rr) {
 }
 
 function start_time($dt) {
-  $date = date_parse($dt);
-  $sdate = $date["year"] ."-". $date["month"] ."-". $date["day"];
+  $time = strtotime($dt);
+  $sdate = date("l jS", $time);
   
-  if (!empty($date["hour"])) {
-    $sdate .= " ". $date["hour"] .":". $date["minute"];
+  if (!empty(date_parse($dt)["hour"])) {
+    $sdate .= ", ". date("H:i", $time);
   }
 
   return $sdate;
 }
 
 function end_time($dt) {
-  $date = date_parse($dt);
-  if (empty($date["hour"])) {
-    $sdate = $date["year"] ."-". $date["month"] ."-". $date["day"];
+  $time = strtotime($dt);
+  if (empty(date_parse($dt)["hour"])) {
+    $sdate = date("F jS", $time);
   } else {
-    $sdate = $date["hour"] .":". $date["minute"];
+    $sdate = date("H:i", $time);
   }
 
   return $sdate;
@@ -206,7 +206,7 @@ class ics extends \spouts\spout {
       if ($this->items == false) {
         return false;
       }
-      
+
       return $this;
     }
 
@@ -243,9 +243,16 @@ class ics extends \spouts\spout {
         }
         
         $event_date = strtotime($event["DTSTART"]);
-        $daydiff = floor(($event_date - time()) / 60 / 60 / 24); // in days
+        $daydiff = round(($event_date - time()) / 60 / 60 / 24, 1); // in days
           
         if (isset($event["RRULE"])) { // repeating event
+          if (isset($event["RRULE"]["UNTIL"])
+              && strtotime($event["RRULE"]["UNTIL"]) < time())
+          {
+            // stopped earlier than now
+            continue;
+          }
+            
           if ($event["RRULE"]["FREQ"] === "WEEKLY") {
             if ($event["RRULE"]["INTERVAL"] !== "1") {
               //ignore for now
@@ -379,15 +386,14 @@ class ics extends \spouts\spout {
 	} else {
           $description .= "\nDans ".$event["DDIST"]. " jour";
           
-          if ($disttime !== 1) {
+          if ($event["DDIST"] > 1) {
             $description .= "s";
           }
         }
 
-        $description = str_replace("<br>", "\n", htmlentities($description));
-        
+        $description = str_replace("\n", "<br/>\n", htmlentities($description));
+
         return $description;
-        
     }
 
 
