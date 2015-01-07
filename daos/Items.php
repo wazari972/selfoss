@@ -90,7 +90,14 @@ class Items extends Database {
           }
           $items = array_values($items);
         }
-        
+        if(!isset($options['tag']) || strlen($options['tag']) === 0) {
+          foreach($items as $idx => $item) {
+            if (strpos($item['tags'], "#") !== false) {
+              unset($items[$idx]);
+            }
+          }
+          $items = array_values($items);
+        }
         return $items;
     }
 }
