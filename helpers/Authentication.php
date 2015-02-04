@@ -68,6 +68,16 @@ class Authentication {
         if (\F3::get('trusted_ip') && in_array($_SERVER["REMOTE_ADDR"], \F3::get('trusted_ip'))){
           $this->loggedin = true;
         }
+        
+        // autologin for SSH authenticated ips
+        $AUTOLOGIN_FILE = "/var/www/alternc/k/kevin/.ssh_autologin";
+        if (file_exists($AUTOLOGIN_FILE)
+            && (time() - filemtime($AUTOLOGIN_FILE)) < 60*60*12 // file is newer than 12h
+            && $_SERVER["REMOTE_ADDR"] == str_replace("\n", "", file_get_contents($AUTOLOGIN_FILE)))
+        {
+          touch($AUTOLOGIN_FILE);
+          $this->loggedin = true;
+        }
     }
     
     
