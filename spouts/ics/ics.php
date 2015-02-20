@@ -255,7 +255,7 @@ class ics extends \spouts\spout {
             
           if ($event["RRULE"]["FREQ"] === "WEEKLY") {
             if ($event["RRULE"]["INTERVAL"] !== "1") {
-              $event["DESCRIPTION"] = "Not supported yet."
+              $event["DESCRIPTION"] = "Not supported yet.";
             }
             $DAYS_OF_WEEK = array("SU" => 0, "MO" => 1, "TU" => 2, "WE" => 3, "TH" => 4, "FR" => 5, "SA" => 6);
 
