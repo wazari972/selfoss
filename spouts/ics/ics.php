@@ -241,7 +241,6 @@ class ics extends \spouts\spout {
         if (!$event) {
           return false;
         }
-        
         $event_date = strtotime($event["DTSTART"]);
         $daydiff = round(($event_date - time()) / 60 / 60 / 24, 1); // in days
           
@@ -252,7 +251,19 @@ class ics extends \spouts\spout {
             // stopped earlier than now
             continue;
           }
-            
+          if (isset($event["RRULE"]["COUNT"]))  {
+            if ($event["RRULE"]["FREQ"] !== "WEEKLY") {
+              echo "Event '".$event["SUMMARY"] . "' not well supported (COUNT and not WEEKLY)<br/>\n";
+
+            } else {
+              $length = 7 * intval($event["RRULE"]["INTERVAL"]);
+              if ($daydiff + $length < 0) {
+                // repeating event until past date
+                continue;
+              }
+            }
+          }
+
           if ($event["RRULE"]["FREQ"] === "WEEKLY") {
             if ($event["RRULE"]["INTERVAL"] !== "1") {
               $event["DESCRIPTION"] = "Not supported yet.";
@@ -263,7 +274,6 @@ class ics extends \spouts\spout {
               $daydiff = $DAYS_OF_WEEK[$event["RRULE"]["BYDAY"]] - date("w");
               if ($daydiff < 0) $daydiff += 7;
             }
-            
           } else {
             // ignore for now
             continue;
