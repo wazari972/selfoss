@@ -97,7 +97,7 @@ selfoss.events.entries = function(e) {
                 selfoss.setupFancyBox(content, parent.attr('id').substr(5));
 
                 // scroll to article header
-                parent.get(0).scrollIntoView();
+                //parent.get(0).scrollIntoView();
             }
             
             // load images not on mobile devices
