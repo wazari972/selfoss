@@ -249,8 +249,8 @@ class Web extends Prefab {
 	**/
 	protected function _curl($url,$options) {
 		$curl=curl_init($url);
-		curl_setopt($curl,CURLOPT_FOLLOWLOCATION,
-			$options['follow_location']);
+/*		curl_setopt($curl,CURLOPT_FOLLOWLOCATION,
+			$options['follow_location']);*/
 		curl_setopt($curl,CURLOPT_MAXREDIRS,
 			$options['max_redirects']);
 		curl_setopt($curl,CURLOPT_CUSTOMREQUEST,$options['method']);
