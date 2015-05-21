@@ -47,9 +47,18 @@ class Index extends BaseController {
         $itemsDao = new \daos\Items();
         $stats = $itemsDao->stats();
         $this->view->statsAll = $stats['total'];
-        $this->view->statsUnread = $stats['unread'] - $itemsDao->numberOfUnreadForTag("#");;
+        $this->view->statsUnread = $stats['unread'];
         $this->view->statsStarred = $stats['starred'];
-        
+
+        if ($tagsDao->hasTag("#")) {
+		foreach ($tags as $tag) {
+			if (strcmp($tag["tag"], "#") !== 0) {
+				continue;
+			}
+			$this->view->statsUnread -= $tag["unread"];
+		}
+	}        
+     
         // prepare tags display list
         $tagsController = new \controllers\Tags();
         $this->view->tags = $tagsController->renderTags($tags);
