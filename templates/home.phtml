@@ -4,7 +4,7 @@
 
     <meta charset="utf-8">
 
-    <title>selfoss<?PHP echo $this->statsUnread>0 ? ' ('.$this->statsUnread.')' : ''; ?></title>
+    <title><?PHP echo trim(\F3::get('html_title')); echo $this->statsUnread>0 ? ' ('.$this->statsUnread.')' : ''; ?></title>
     
     <meta name="description" content="selfoss" />
     <meta name="author" content="Tobias Zeising" />
@@ -68,11 +68,13 @@
         data-anonymizer="<?PHP echo \helpers\Anonymizer::getAnonymizer(); ?>"
         data-share="<?PHP echo \F3::get('share'); ?>"
         data-wallabag="<?PHP echo \F3::get('wallabag'); ?>"
+        data-wordpress="<?PHP echo \F3::get('wordpress'); ?>"
         data-auto_mark_as_read="<?PHP echo \F3::get('auto_mark_as_read'); ?>"
         data-auto_stream_more="<?PHP echo \F3::get('auto_stream_more'); ?>"
         data-load_images_on_mobile="<?PHP echo \F3::get('load_images_on_mobile'); ?>"
         data-items_perpage="<?PHP echo \F3::get('items_perpage'); ?>"
-        data-auto_hide_read_on_mobile="<?PHP echo \F3::get('auto_hide_read_on_mobile'); ?>"></span>
+        data-auto_hide_read_on_mobile="<?PHP echo \F3::get('auto_hide_read_on_mobile'); ?>"
+        data-html_title="<?PHP echo trim(\F3::get('html_title')); ?>"></span>
 
     <!-- menue open for smartphone -->
     <div id="nav-mobile">
@@ -148,6 +150,8 @@
         <?PHP echo $this->content; ?>
     </div>
     
+    <div class="stream-error"><?PHP echo trim(\F3::get('lang_streamerror')); ?></div>
+
     <!-- fullscreen popup -->
     <div id="fullscreen-entry"></div>
     

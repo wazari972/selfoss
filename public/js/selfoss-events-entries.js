@@ -124,9 +124,9 @@ selfoss.events.entries = function(e) {
             $('.stream-more').click();
     });
     
-    $('.mark-these-read').unbind('click').click(function () {
-        $('#nav-mark').click();
-    });
+    $('.mark-these-read').unbind('click').click(selfoss.markVisibleRead);
+
+    $('.stream-error').unbind('click').click(selfoss.reloadList);
 
     // more
     $('.stream-more').unbind('click').click(function () {

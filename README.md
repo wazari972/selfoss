@@ -4,7 +4,7 @@ selfoss
 Copyright (c) 2015 Tobias Zeising, tobias.zeising@aditu.de  
 http://selfoss.aditu.de  
 Licensed under the GPLv3 license  
-Version 2.14-SNAPSHOT
+Version 2.15-SNAPSHOT
 
 
 INSTALLATION
@@ -14,7 +14,7 @@ INSTALLATION
 2. Make the directories data/cache, data/favicons, data/logs, data/thumbnails, data/sqlite and public/ writeable
 3. Insert database access data in config.ini (see below -- you don't have to change anything if you want to use sqlite)
 3. You don't have to install the database, it will be created automatically (ensure that your database has enought rights for creating triggers)
-4. Create cronjob for updating feeds and point it to http://yourselfossurl.com/update via wget or curl. You can also execute the update.php from commandline.
+4. Create cronjob for updating feeds and point it to http://yourselfossurl.com/update via wget or curl. You can also execute the cliupdate.php from commandline.
 
 For further questions or on any problem use our support forum: http://selfoss.aditu.de/forum
 
@@ -51,7 +51,7 @@ Visit the page http://yourselfossurl.com/opml for importing your OPML File. If y
 APPS
 ----
 
-Third party apps are available for iOS and Android: [Cataracta](https://itunes.apple.com/us/app/cataracta/id817392033?mt=8&ign-mpt=uo%3D4) and [Selfoss](https://play.google.com/store/apps/details?id=fr.ydelouis.selfoss).
+A third party app is available for Android: [Selfoss](https://play.google.com/store/apps/details?id=fr.ydelouis.selfoss).
 
 
 DEVELOPMENT
