@@ -157,6 +157,7 @@ class ics extends \spouts\spout {
      */
     public function load($params) {
       $link = $params['url'];
+/*
       if (strpos($link, "owncloud_") === 0) { // owncloud_<cal_id>
         $calendar_lines = owncloud_get_calendar($params['username'],
                                                 substr($link, 1+strpos($link, "_")));
@@ -177,6 +178,7 @@ class ics extends \spouts\spout {
       $this->rewind();
 
       $this->params = $params;
+*/
     }
 
     //
