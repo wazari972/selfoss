@@ -84,6 +84,7 @@
     
     <!-- navigation -->
     <div id="nav">
+        <div id="nav-head"><a title="Carte de vigilance meteo" href="http://vigilance.meteofrance.com/index.html" target="_blank"><img src="http://www.meteo.fr/meteonet/vigilance/cartes/derniers/mn.gif"/></a></div>
         <div id="nav-logo"></div>
         <div id="nav-mark"><?PHP echo \F3::get('lang_markread')?></div>
         
@@ -115,7 +116,7 @@
             <input type="text" id="nav-search-term" /> <input type="button" id="nav-search-button" value="<?PHP echo \F3::get('lang_searchbutton')?>" />
             <hr>
         </div>
-        
+
         <?PHP if($this->loggedin===true && \F3::get('auth')->enabled()===false) : ?>
         <div id="nav-refresh" title="<?PHP echo trim(\F3::get('lang_refreshbutton')); ?>" class="nologin"></div>
         <div id="nav-settings" title="<?PHP echo trim(\F3::get('lang_settingsbutton')); ?>" class="nologin"></div>

@@ -62,7 +62,14 @@ input {
         width:31px;
         height:37px;
     }
-    
+    #nav-head {
+        position:relative;
+        left:80px;
+        top:14px;
+        width:31px;
+        height:37px;
+    }
+
     #nav-mark {
         padding:10px;
         margin-left:15px;
