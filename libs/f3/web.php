@@ -281,11 +281,6 @@ class Web extends Prefab {
 		curl_exec($curl);
 		curl_close($curl);
 		$body=ob_get_clean();
-		if ($options['follow_location'] &&
-			preg_match('/^Location: (.+)$/m',implode(PHP_EOL,$headers),$loc)) {
-			$options['max_redirects']--;
-			return $this->request($loc[1],$options);
-		}
 		return array(
 			'body'=>$body,
 			'headers'=>$headers,
