@@ -58,11 +58,13 @@ input {
         position:absolute;
         left:20px;
         top:14px;
-        background:url(images/logo.png);
+
+        background: url(images/logo.png);
         width:31px;
         height:37px;
     }
     #nav-head {
+        
         position:relative;
         left:80px;
         top:14px;
@@ -267,7 +269,8 @@ input {
     }
         
     #nav-logout {
-        background:url(images/nav-logout.png) no-repeat center center #272325;
+        /*background:url(images/nav-logout.png) no-repeat center center #272325;*/
+        background:url(http://blog.0x972.info/img/pollution.png) no-repeat center center #272325;
         left:120px;
     }    
     
